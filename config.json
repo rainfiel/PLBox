@@ -1,0 +1,22 @@
+{
+	"tools": [
+		{
+			"id": 0,
+			"name": "选择工具",
+			"pageModule": "welcome",
+			"desc":"从下拉框选择工具"
+		},
+		{
+			"id": 1,
+			"name": "服务器管理",
+			"pageModule": "servers",
+			"desc":"添加/修改/删除服务器配置"
+		},
+		{
+			"id": 2,
+			"name": "发布公告",
+			"pageModule": "billboard",
+			"desc":"设置服务器公告"
+		}
+	]
+}
