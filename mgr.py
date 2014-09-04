@@ -1,5 +1,6 @@
 
 import wx
+import wx.xrc as xrc
 import json
 import codecs
 
@@ -14,6 +15,10 @@ class Page(object):
 		self.data = data
 
 		wx.StaticText(self.panel, -1, self.data.desc, (10, 10))
+
+		res = xrc.XmlResource("pages/"+self.data.pageModule+".xrc")
+		if res:
+			self.xrcPanel = res.LoadPanel(self.panel, "root")
 
 class Tool(object):
 	def __init__(self, data):

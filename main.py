@@ -7,9 +7,11 @@ mgr.init("config.json")
 #----------------------------------------------------------------------------
 
 class Books(wx.Choicebook):
-    def __init__(self, parent, id, log):
-        wx.Choicebook.__init__(self, parent, id)
+    def __init__(self, parent, app, log):
+        wx.Choicebook.__init__(self, parent, -1)
         self.log = log
+        self.parent = parent
+        self.app = app
 
         # Now make a bunch of panels for the choice book
         count = 1
@@ -26,6 +28,8 @@ class Books(wx.Choicebook):
         old = event.GetOldSelection()
         new = event.GetSelection()
         sel = self.GetSelection()
+        tool = mgr.Inst.tools[sel]
+        self.app.statusBar.SetStatusText(tool.desc)
         self.log.write('OnPageChanged,  old:%d, new:%d, sel:%d\n' % (old, new, sel))
         event.Skip()
 
@@ -39,7 +43,7 @@ class Books(wx.Choicebook):
 #----------------------------------------------------------------------------
 
 def runTest(frame, nb, log):
-    testWin = Books(nb, -1, log)
+    testWin = Books(frame, nb, log)
     return testWin
 
 #----------------------------------------------------------------------------

@@ -58,7 +58,7 @@ class RunDemoApp(wx.App, wx.lib.mixins.inspection.InspectionMixin):
 
         frame = wx.Frame(None, -1, "PLBox", pos=(50,50), size=(200,100),
                         style=wx.DEFAULT_FRAME_STYLE, name="PL tool box")
-        frame.CreateStatusBar()
+        self.statusBar = frame.CreateStatusBar()
 
         menuBar = wx.MenuBar()
         menu = wx.Menu()
@@ -78,7 +78,7 @@ class RunDemoApp(wx.App, wx.lib.mixins.inspection.InspectionMixin):
         frame.Show(True)
         frame.Bind(wx.EVT_CLOSE, self.OnCloseFrame)
 
-        win = self.demoModule.runTest(frame, frame, Log())
+        win = self.demoModule.runTest(frame, self, Log())
 
         # a window will be returned if the demo does not create
         # its own top-level window
@@ -151,7 +151,6 @@ def main(argv):
 
     name, ext  = os.path.splitext(argv[1])
     module = __import__(name)
-    print(name, ext, module)
 
     app = RunDemoApp(name, module, useShell)
     app.MainLoop()
