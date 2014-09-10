@@ -7,4 +7,4 @@ class servers(mgr.Page):
 		pass
 
 	def create(self, panel, data):
-		super(servers, self).create(panel, data)
+		return super(servers, self).create(panel, data)

@@ -7,4 +7,4 @@ class welcome(mgr.Page):
 		pass
 
 	def create(self, panel, data):
-		super(welcome, self).create(panel, data)
+		return super(welcome, self).create(panel, data)

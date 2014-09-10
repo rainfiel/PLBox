@@ -16,13 +16,11 @@ class Books(wx.Choicebook):
         # Now make a bunch of panels for the choice book
         count = 1
         for tool in mgr.Inst.tools:
-            win = wx.Panel(self)
-            self.AddPage(win, tool.name)
-            tool.createPage(win)
+            panel = tool.createPage(self)
+            self.AddPage(panel, tool.name)
 
         self.Bind(wx.EVT_CHOICEBOOK_PAGE_CHANGED, self.OnPageChanged)
         self.Bind(wx.EVT_CHOICEBOOK_PAGE_CHANGING, self.OnPageChanging)
-
 
     def OnPageChanged(self, event):
         old = event.GetOldSelection()

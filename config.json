@@ -2,7 +2,7 @@
 	"tools": [
 		{
 			"id": 0,
-			"name": "选择工具",
+			"name": "开始页",
 			"pageModule": "welcome",
 			"desc":"从下拉框选择工具"
 		},
@@ -18,5 +18,22 @@
 			"pageModule": "billboard",
 			"desc":"设置服务器公告"
 		}
-	]
+	],
+	"platform": [
+		{
+			"name": "gamesrv"
+		},
+		{
+			"name": "momo"
+		}
+	],
+	"os": [
+		{
+			"name": "IOS"
+		},
+		{
+			"name": "ANDROID"
+		}
+	],
+	"data_root": "D:\\dapili\\branches\\momo\\tech\\launcher"
 }

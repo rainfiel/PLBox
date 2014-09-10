@@ -73,7 +73,7 @@ class RunDemoApp(wx.App, wx.lib.mixins.inspection.InspectionMixin):
         ns['app'] = self
         ns['module'] = self.demoModule
         ns['frame'] = frame
-        
+
         frame.SetMenuBar(menuBar)
         frame.Show(True)
         frame.Bind(wx.EVT_CLOSE, self.OnCloseFrame)
@@ -84,7 +84,7 @@ class RunDemoApp(wx.App, wx.lib.mixins.inspection.InspectionMixin):
         # its own top-level window
         if win:
             # so set the frame to a good size for showing stuff
-            frame.SetSize((640, 480))
+            frame.SetSize((640, 540))
             win.SetFocus()
             self.window = win
             ns['win'] = win
@@ -117,7 +117,7 @@ class RunDemoApp(wx.App, wx.lib.mixins.inspection.InspectionMixin):
                     shell.Close()
                 evt.Skip()
             frame.Bind(wx.EVT_CLOSE, CloseShell)
-                    
+
         return True
 
 
@@ -132,7 +132,7 @@ class RunDemoApp(wx.App, wx.lib.mixins.inspection.InspectionMixin):
 
     def OnWidgetInspector(self, evt):
         wx.lib.inspection.InspectionTool().Show()
-    
+
 
 #----------------------------------------------------------------------------
 
@@ -144,7 +144,7 @@ def main(argv):
             useShell = True
             del sys.argv[x]
             break
-    
+
     if len(argv) < 2:
         print "Please specify a demo module name on the command-line"
         raise SystemExit

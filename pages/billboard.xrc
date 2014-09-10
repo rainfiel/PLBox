@@ -1,145 +1,152 @@
-<?xml version="1.0" ?>
-<resource>
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<resource xmlns="http://www.wxwindows.org/wxxrc" version="2.3.0.1">
   <object class="wxPanel" name="root">
-    <object class="wxGridBagSizer">
+    <style>wxTAB_TRAVERSAL</style>
+    <size>640,480</size>
+    <object class="wxBoxSizer">
+      <orient>wxVERTICAL</orient>
       <object class="sizeritem">
-        <cellpos>0,0</cellpos>
-        <cellspan>4,1</cellspan>
-        <object class="wxFlexGridSizer">
-          <cols>2</cols>
-          <rows>0</rows>
-          <vgap>0</vgap>
-          <hgap>0</hgap>
+        <option>1</option>
+        <flag>wxALL|wxEXPAND|wxFIXED_MINSIZE</flag>
+        <border>5</border>
+        <object class="wxBoxSizer">
+          <orient>wxHORIZONTAL</orient>
           <object class="sizeritem">
-            <flag>wxTOP|wxLEFT|wxRIGHT|wxALL|wxALIGN_RIGHT|wxALIGN_CENTRE_VERTICAL</flag>
-            <border>5</border>
-            <object class="wxStaticText" name="ID_TEXT">
-              <label>Name:</label>
-            </object>
-          </object>
-          <object class="sizeritem">
-            <flag>wxTOP|wxLEFT|wxRIGHT|wxEXPAND|wxGROW|wxALIGN_CENTRE_VERTICAL</flag>
-            <border>5</border>
-            <object class="wxTextCtrl" name="ID_NameField">
-              <size>100,-1</size>
-              <value/>
-            </object>
-          </object>
-          <object class="sizeritem">
-            <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT|wxTOP</flag>
-            <border>5</border>
-            <object class="wxStaticText" name="ID_TEXT">
-              <label>Address:</label>
-            </object>
-          </object>
-          <object class="sizeritem">
-            <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT|wxTOP</flag>
-            <border>5</border>
-            <object class="wxTextCtrl" name="ID_Addr1Field">
-              <size>100,-1</size>
-              <value/>
-            </object>
-          </object>
-          <object class="spacer">
-            <size>20,20</size>
-          </object>
-          <object class="sizeritem">
-            <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT|wxTOP</flag>
-            <border>5</border>
-            <object class="wxTextCtrl" name="ID_TEXTCTRL">
-              <size>100,-1</size>
-              <value/>
-            </object>
-          </object>
-          <object class="sizeritem">
-            <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT|wxTOP</flag>
-            <border>5</border>
-            <object class="wxStaticText" name="ID_TEXT">
-              <label>City, State, Zip:</label>
-            </object>
-          </object>
-          <object class="sizeritem">
-            <flag>wxGROW|wxALIGN_CENTER_VERTICAL</flag>
+            <option>1</option>
+            <flag>wxALIGN_LEFT|wxEXPAND</flag>
             <border>5</border>
             <object class="wxBoxSizer">
               <orient>wxHORIZONTAL</orient>
               <object class="sizeritem">
-                <flag>wxALIGN_CENTRE|wxLEFT|wxTOP</flag>
+                <option>0</option>
+                <flag>wxALL</flag>
                 <border>5</border>
-                <object class="wxTextCtrl" name="ID_CityField">
-                  <size>100,-1</size>
-                  <value/>
+                <object class="wxStaticText" name="m_staticText1">
+                  <label>选择平台：</label>
+                  <wrap>-1</wrap>
                 </object>
               </object>
               <object class="sizeritem">
-                <flag>wxALIGN_CENTRE|wxLEFT|wxTOP</flag>
+                <option>0</option>
+                <flag>wxALL</flag>
                 <border>5</border>
-                <object class="wxTextCtrl" name="ID_StateField">
-                  <size>30,-1</size>
-                  <value/>
+                <object class="wxListBox" name="m_platform_lb">
+                  <content />
+                </object>
+              </object>
+            </object>
+          </object>
+          <object class="sizeritem">
+            <option>1</option>
+            <flag>wxALIGN_RIGHT</flag>
+            <border>5</border>
+            <object class="wxBoxSizer">
+              <orient>wxHORIZONTAL</orient>
+              <object class="sizeritem">
+                <option>0</option>
+                <flag>wxALL</flag>
+                <border>5</border>
+                <object class="wxStaticText" name="m_staticText2">
+                  <label>选择系统：</label>
+                  <wrap>-1</wrap>
                 </object>
               </object>
               <object class="sizeritem">
-                <flag>wxALIGN_CENTRE|wxLEFT|wxRIGHT|wxTOP</flag>
+                <option>0</option>
+                <flag>wxALL</flag>
                 <border>5</border>
-                <object class="wxTextCtrl" name="ID_ZipField">
-                  <size>50,-1</size>
-                  <value/>
+                <object class="wxListBox" name="m_os_lb">
+                  <content />
                 </object>
               </object>
-            </object>
-          </object>
-          <object class="sizeritem">
-            <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxALL</flag>
-            <border>5</border>
-            <object class="wxStaticText" name="ID_TEXT">
-              <label>Phone:</label>
-            </object>
-          </object>
-          <object class="sizeritem">
-            <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT|wxTOP</flag>
-            <border>5</border>
-            <object class="wxTextCtrl" name="ID_PhoneField">
-              <size>100,-1</size>
-              <value/>
-            </object>
-          </object>
-          <object class="sizeritem">
-            <flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxALL</flag>
-            <border>5</border>
-            <object class="wxStaticText" name="ID_TEXT">
-              <label>Email:</label>
-            </object>
-          </object>
-          <object class="sizeritem">
-            <flag>wxGROW|wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT|wxTOP</flag>
-            <border>5</border>
-            <object class="wxTextCtrl" name="ID_EmailField">
-              <size>100,-1</size>
-              <value/>
             </object>
           </object>
         </object>
       </object>
-      <object class="spacer">
-        <size>20,20</size>
-        <flag>wxALIGN_CENTRE|wxALL</flag>
+      <object class="sizeritem">
+        <option>1</option>
+        <flag>wxALIGN_BOTTOM|wxALL|wxEXPAND</flag>
         <border>5</border>
-      </object>
-      <object class="sizeritem">
-        <cellpos>1,2</cellpos>
-        <object class="wxButton" name="wxID_OK">
-          <label>Save</label>
+        <object class="wxBoxSizer">
+          <orient>wxHORIZONTAL</orient>
+          <object class="sizeritem">
+            <option>0</option>
+            <flag>wxALL</flag>
+            <border>5</border>
+            <object class="wxStaticText" name="m_staticText5">
+              <label>选择公告类型：</label>
+              <wrap>-1</wrap>
+            </object>
+          </object>
+          <object class="sizeritem">
+            <option>0</option>
+            <flag>wxALL</flag>
+            <border>5</border>
+            <object class="wxComboBox" name="m_billboard_type">
+              <style>wxCB_DROPDOWN|wxCB_READONLY</style>
+              <value>普通公告</value>
+              <content>
+                <item>停服公告</item>
+                <item>普通公告</item>
+              </content>
+            </object>
+          </object>
         </object>
       </object>
       <object class="sizeritem">
-        <cellpos>2,2</cellpos>
-        <object class="wxButton" name="wxID_CANCEL">
-          <label>Cancel</label>
+        <option>1</option>
+        <flag>wxALL|wxEXPAND|wxTOP</flag>
+        <border>5</border>
+        <object class="wxBoxSizer">
+          <orient>wxVERTICAL</orient>
+          <object class="sizeritem">
+            <option>0</option>
+            <flag>wxALL|wxEXPAND</flag>
+            <border>5</border>
+            <object class="wxTextCtrl" name="m_billboard_title">
+              <bg>#ffffe1</bg>
+              <value></value>
+            </object>
+          </object>
+          <object class="sizeritem">
+            <option>0</option>
+            <flag>wxALL|wxEXPAND</flag>
+            <border>5</border>
+            <object class="wxTextCtrl" name="m_billboard_content">
+              <style>wxTE_MULTILINE|wxTE_RICH2</style>
+              <size>-1,200</size>
+              <bg>#bfcddb</bg>
+              <value></value>
+            </object>
+          </object>
         </object>
       </object>
-      <vgap>1</vgap>
-      <hgap>0</hgap>
+      <object class="sizeritem">
+        <option>1</option>
+        <flag>wxALIGN_CENTER|wxALL|wxEXPAND</flag>
+        <border>5</border>
+        <object class="wxBoxSizer">
+          <orient>wxHORIZONTAL</orient>
+          <object class="sizeritem">
+            <option>0</option>
+            <flag>wxALIGN_CENTER_HORIZONTAL|wxALL|wxEXPAND</flag>
+            <border>5</border>
+            <object class="wxButton" name="m_ok_btn">
+              <label>上传</label>
+              <default>0</default>
+            </object>
+          </object>
+          <object class="sizeritem">
+            <option>0</option>
+            <flag>wxALIGN_CENTER_HORIZONTAL|wxALL|wxEXPAND</flag>
+            <border>5</border>
+            <object class="wxButton" name="m_del_btn">
+              <label>删除</label>
+              <default>0</default>
+            </object>
+          </object>
+        </object>
+      </object>
     </object>
   </object>
 </resource>
