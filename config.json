@@ -10,13 +10,15 @@
 			"id": 1,
 			"name": "服务器管理",
 			"pageModule": "servers",
-			"desc":"添加/修改/删除服务器配置"
+			"desc":"添加/修改/删除服务器配置",
+			"needTarget":1
 		},
 		{
 			"id": 2,
 			"name": "发布公告",
 			"pageModule": "billboard",
-			"desc":"设置服务器公告"
+			"desc":"设置服务器公告",
+			"needTarget":1
 		}
 	],
 	"platform": [
@@ -30,6 +32,15 @@
 	"os": [
 		{
 			"name": "IOS"
+		},
+		{
+			"name": "ANDROID"
+		},
+		{
+			"name": "ANDROID"
+		},
+		{
+			"name": "ANDROID"
 		},
 		{
 			"name": "ANDROID"

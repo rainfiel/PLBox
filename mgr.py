@@ -10,6 +10,11 @@ class Page(object):
 	def __init__(self):
 		self.panel = None
 
+	#---------interface--------------------------
+	def onSelectTarget(self, pl_name, os_name):
+		pass
+	#--------------------------------------------
+
 	def create(self, data, container):
 		self.data = data
 		self.container = container
@@ -17,15 +22,36 @@ class Page(object):
 
 		# wx.StaticText(self.panel, -1, self.data.desc, (10, 10))
 
+		self.root = wx.Panel( self.container, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL )
+		self.root.SetSizeHintsSz( wx.DefaultSize, wx.DefaultSize )
+
+		bSizer = wx.BoxSizer( wx.VERTICAL )
+
+		if getattr(self.data, "needTarget", False):
+			res = xrc.XmlResource("pages/target.xrc")
+			self.targetPanel = res.LoadPanel(self.root, "root")
+			setupTargetData(self.targetPanel, self.onSelectTarget, self.onSelectTarget)
+
+			bSizer.Add(self.targetPanel, 0, wx.ALL|wx.EXPAND, 5)
+
+			line = wx.StaticLine( self.root, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.LI_HORIZONTAL )
+			bSizer.Add(line, 0, wx.ALL|wx.EXPAND, 5)			
+
 		res = xrc.XmlResource("pages/"+self.data.pageModule+".xrc")
 		if res:
-			self.panel = res.LoadPanel(self.container, "root")
+			self.panel = res.LoadPanel(self.root, "root")
 
 		if not self.panel:
 			self.panel = wx.Panel(self.container)
 
-		self.panel.SetAutoLayout(True)
-		return self.panel
+		bSizer.Add(self.panel, 0, wx.ALL|wx.EXPAND, 5)
+		self.root.SetSizer(bSizer)
+		self.root.Layout()
+
+		return self.root
+
+	def getTargetData(self):
+		return getTargetData(self.targetPanel)
 
 class Tool(object):
 	def __init__(self, data):
@@ -78,6 +104,7 @@ class EventHandler(object):
 
 	def __call__(self, evt):
 		pl_name, os_name = getTargetData(self.arg)
+		print(self.functor)
 		self.functor(pl_name, os_name)
 
 def setupTargetData(panel, os_callback, pl_callback):

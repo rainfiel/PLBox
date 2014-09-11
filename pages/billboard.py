@@ -11,9 +11,9 @@ class billboard(mgr.Page):
 		pass
 
 	def create(self, panel, data):
-		panel = super(billboard, self).create(panel, data)
+		root = super(billboard, self).create(panel, data)
 
-		mgr.setupTargetData(panel, self.onSelectTarget, self.onSelectTarget)
+		panel = self.panel
 
 		type_cb = wx.FindWindowByName("m_billboard_type", panel)
 		panel.Bind(wx.EVT_COMBOBOX, self.onSelectType, type_cb)
@@ -24,7 +24,7 @@ class billboard(mgr.Page):
 		del_btn = wx.FindWindowByName("m_del_btn", panel)
 		panel.Bind(wx.EVT_BUTTON, self.onDelBtn, del_btn)
 
-		return panel
+		return root
 
 	def isModified(self):
 		title = wx.FindWindowByName("m_billboard_title", self.panel)
@@ -78,7 +78,7 @@ class billboard(mgr.Page):
 	def refresh(self):
 		btype = self.getType()
 
-		pl_name, os_name = mgr.getTargetData(self.panel)
+		pl_name, os_name = self.getTargetData()
 
 		title = wx.FindWindowByName("m_billboard_title", self.panel)
 		texts = wx.FindWindowByName("m_billboard_content", self.panel)
@@ -86,6 +86,7 @@ class billboard(mgr.Page):
 		title.SetValue("")
 		texts.SetValue("")
 
+		print(pl_name, os_name)
 		self.data = None
 		if pl_name and os_name:
 			self.data = mgr.Inst.getData(pl_name, os_name)

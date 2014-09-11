@@ -2,147 +2,98 @@
 <resource xmlns="http://www.wxwindows.org/wxxrc" version="2.3.0.1">
   <object class="wxPanel" name="root">
     <style>wxTAB_TRAVERSAL</style>
-    <size>640,480</size>
+    <size>534,779</size>
     <object class="wxBoxSizer">
       <orient>wxVERTICAL</orient>
       <object class="sizeritem">
         <option>1</option>
-        <flag>wxALL|wxEXPAND|wxFIXED_MINSIZE</flag>
+        <flag>wxEXPAND|wxALL</flag>
         <border>5</border>
-        <object class="wxBoxSizer">
-          <orient>wxHORIZONTAL</orient>
-          <object class="sizeritem">
-            <option>1</option>
-            <flag>wxALIGN_LEFT|wxEXPAND</flag>
-            <border>5</border>
-            <object class="wxBoxSizer">
-              <orient>wxHORIZONTAL</orient>
-              <object class="sizeritem">
-                <option>0</option>
-                <flag>wxALL</flag>
-                <border>5</border>
-                <object class="wxStaticText" name="m_staticText1">
-                  <label>选择平台：</label>
-                  <wrap>-1</wrap>
-                </object>
-              </object>
-              <object class="sizeritem">
-                <option>0</option>
-                <flag>wxALL</flag>
-                <border>5</border>
-                <object class="wxListBox" name="m_platform_lb">
-                  <content />
-                </object>
-              </object>
-            </object>
-          </object>
-          <object class="sizeritem">
-            <option>1</option>
-            <flag>wxALIGN_RIGHT</flag>
-            <border>5</border>
-            <object class="wxBoxSizer">
-              <orient>wxHORIZONTAL</orient>
-              <object class="sizeritem">
-                <option>0</option>
-                <flag>wxALL</flag>
-                <border>5</border>
-                <object class="wxStaticText" name="m_staticText2">
-                  <label>选择系统：</label>
-                  <wrap>-1</wrap>
-                </object>
-              </object>
-              <object class="sizeritem">
-                <option>0</option>
-                <flag>wxALL</flag>
-                <border>5</border>
-                <object class="wxListBox" name="m_os_lb">
-                  <content />
-                </object>
-              </object>
-            </object>
-          </object>
-        </object>
-      </object>
-      <object class="sizeritem">
-        <option>1</option>
-        <flag>wxALIGN_BOTTOM|wxALL|wxEXPAND</flag>
-        <border>5</border>
-        <object class="wxBoxSizer">
-          <orient>wxHORIZONTAL</orient>
-          <object class="sizeritem">
-            <option>0</option>
-            <flag>wxALL</flag>
-            <border>5</border>
-            <object class="wxStaticText" name="m_staticText5">
-              <label>选择公告类型：</label>
-              <wrap>-1</wrap>
-            </object>
-          </object>
-          <object class="sizeritem">
-            <option>0</option>
-            <flag>wxALL</flag>
-            <border>5</border>
-            <object class="wxComboBox" name="m_billboard_type">
-              <style>wxCB_DROPDOWN|wxCB_READONLY</style>
-              <value>普通公告</value>
-              <content>
-                <item>停服公告</item>
-                <item>普通公告</item>
-              </content>
-            </object>
-          </object>
-        </object>
-      </object>
-      <object class="sizeritem">
-        <option>1</option>
-        <flag>wxALL|wxEXPAND|wxTOP</flag>
-        <border>5</border>
-        <object class="wxBoxSizer">
+        <object class="wxStaticBoxSizer">
           <orient>wxVERTICAL</orient>
+          <label>Step 2: 编辑公告</label>
           <object class="sizeritem">
             <option>0</option>
-            <flag>wxALL|wxEXPAND</flag>
+            <flag>wxALIGN_BOTTOM|wxALL|wxEXPAND</flag>
             <border>5</border>
-            <object class="wxTextCtrl" name="m_billboard_title">
-              <bg>#ffffe1</bg>
-              <value></value>
+            <object class="wxBoxSizer">
+              <orient>wxHORIZONTAL</orient>
+              <object class="sizeritem">
+                <option>0</option>
+                <flag>wxALL</flag>
+                <border>5</border>
+                <object class="wxStaticText" name="m_staticText5">
+                  <label>选择公告类型：</label>
+                  <wrap>-1</wrap>
+                </object>
+              </object>
+              <object class="sizeritem">
+                <option>0</option>
+                <flag>wxALL</flag>
+                <border>5</border>
+                <object class="wxComboBox" name="m_billboard_type">
+                  <style>wxCB_DROPDOWN|wxCB_READONLY</style>
+                  <value>普通公告</value>
+                  <content>
+                    <item>停服公告</item>
+                    <item>普通公告</item>
+                  </content>
+                </object>
+              </object>
+            </object>
+          </object>
+          <object class="sizeritem">
+            <option>1</option>
+            <flag>wxALL|wxTOP|wxEXPAND</flag>
+            <border>5</border>
+            <object class="wxBoxSizer">
+              <orient>wxVERTICAL</orient>
+              <object class="sizeritem">
+                <option>0</option>
+                <flag>wxALL|wxEXPAND</flag>
+                <border>5</border>
+                <object class="wxTextCtrl" name="m_billboard_title">
+                  <bg>#ffffe1</bg>
+                  <value></value>
+                </object>
+              </object>
+              <object class="sizeritem">
+                <option>1</option>
+                <flag>wxALL|wxEXPAND</flag>
+                <border>5</border>
+                <object class="wxTextCtrl" name="m_billboard_content">
+                  <style>wxTE_MULTILINE|wxTE_RICH2</style>
+                  <size>-1,200</size>
+                  <bg>#bfcddb</bg>
+                  <value></value>
+                </object>
+              </object>
             </object>
           </object>
           <object class="sizeritem">
             <option>0</option>
-            <flag>wxALL|wxEXPAND</flag>
+            <flag>wxALIGN_CENTER|wxALL|wxEXPAND</flag>
             <border>5</border>
-            <object class="wxTextCtrl" name="m_billboard_content">
-              <style>wxTE_MULTILINE|wxTE_RICH2</style>
-              <size>-1,200</size>
-              <bg>#bfcddb</bg>
-              <value></value>
-            </object>
-          </object>
-        </object>
-      </object>
-      <object class="sizeritem">
-        <option>1</option>
-        <flag>wxALIGN_CENTER|wxALL|wxEXPAND</flag>
-        <border>5</border>
-        <object class="wxBoxSizer">
-          <orient>wxHORIZONTAL</orient>
-          <object class="sizeritem">
-            <option>0</option>
-            <flag>wxALIGN_CENTER_HORIZONTAL|wxALL|wxEXPAND</flag>
-            <border>5</border>
-            <object class="wxButton" name="m_ok_btn">
-              <label>上传</label>
-              <default>0</default>
-            </object>
-          </object>
-          <object class="sizeritem">
-            <option>0</option>
-            <flag>wxALIGN_CENTER_HORIZONTAL|wxALL|wxEXPAND</flag>
-            <border>5</border>
-            <object class="wxButton" name="m_del_btn">
-              <label>删除</label>
-              <default>0</default>
+            <object class="wxBoxSizer">
+              <orient>wxHORIZONTAL</orient>
+              <object class="sizeritem">
+                <option>0</option>
+                <flag>wxALIGN_CENTER_HORIZONTAL|wxALL</flag>
+                <border>5</border>
+                <object class="wxButton" name="m_ok_btn">
+                  <label>上传</label>
+                  <default>0</default>
+                </object>
+              </object>
+              <object class="sizeritem">
+                <option>0</option>
+                <flag>wxALIGN_CENTER_HORIZONTAL|wxALL</flag>
+                <border>5</border>
+                <object class="wxButton" name="m_del_btn">
+                  <label>删除</label>
+                  <default>0</default>
+                </object>
+              </object>
             </object>
           </object>
         </object>
