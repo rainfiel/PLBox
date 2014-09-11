@@ -17,7 +17,7 @@
 			"id": 2,
 			"name": "发布公告",
 			"pageModule": "billboard",
-			"desc":"设置服务器公告",
+			"desc":"管理服务器公告",
 			"needTarget":1
 		}
 	],
@@ -32,15 +32,6 @@
 	"os": [
 		{
 			"name": "IOS"
-		},
-		{
-			"name": "ANDROID"
-		},
-		{
-			"name": "ANDROID"
-		},
-		{
-			"name": "ANDROID"
 		},
 		{
 			"name": "ANDROID"

@@ -34,8 +34,8 @@ class Page(object):
 
 			bSizer.Add(self.targetPanel, 0, wx.ALL|wx.EXPAND, 5)
 
-			line = wx.StaticLine( self.root, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.LI_HORIZONTAL )
-			bSizer.Add(line, 0, wx.ALL|wx.EXPAND, 5)			
+			# line = wx.StaticLine( self.root, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.LI_HORIZONTAL )
+			# bSizer.Add(line, 0, wx.ALL|wx.EXPAND, 5)			
 
 		res = xrc.XmlResource("pages/"+self.data.pageModule+".xrc")
 		if res:
