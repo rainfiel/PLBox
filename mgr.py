@@ -104,7 +104,6 @@ class EventHandler(object):
 
 	def __call__(self, evt):
 		pl_name, os_name = getTargetData(self.arg)
-		print(self.functor)
 		self.functor(pl_name, os_name)
 
 def setupTargetData(panel, os_callback, pl_callback):

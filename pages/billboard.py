@@ -86,7 +86,6 @@ class billboard(mgr.Page):
 		title.SetValue("")
 		texts.SetValue("")
 
-		print(pl_name, os_name)
 		self.data = None
 		if pl_name and os_name:
 			self.data = mgr.Inst.getData(pl_name, os_name)
