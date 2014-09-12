@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 
 import wx
 import mgr
@@ -13,7 +14,7 @@ class servers(mgr.Page):
 
 		self.srv_lb = wx.FindWindowByName("m_server_list", panel)
 		panel.Bind(wx.EVT_LISTBOX, self.onSelectServer, self.srv_lb)
-		
+
 		self.setServerList(("aaaa", "bbbb", "cccc"))
 
 		return root

@@ -1,14 +1,23 @@
+# -*- coding: utf-8 -*-
 
+import os
 import wx
 import wx.xrc as xrc
 import json
 import codecs
+import requests
+import json
+
+from launcher import *
 
 Inst = None
+LOG_URL = "https://testcmk.ejoy.com/dl/DPL/create"
+headers = {'Content-type': 'application/json; charset=utf-8', 'Accept': 'application/json'}
 
 class Page(object):
 	def __init__(self):
 		self.panel = None
+		self.processing = False
 
 	#---------interface--------------------------
 	def onSelectTarget(self, pl_name, os_name):
@@ -35,7 +44,7 @@ class Page(object):
 			bSizer.Add(self.targetPanel, 0, wx.ALL|wx.EXPAND, 5)
 
 			# line = wx.StaticLine( self.root, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.LI_HORIZONTAL )
-			# bSizer.Add(line, 0, wx.ALL|wx.EXPAND, 5)			
+			# bSizer.Add(line, 0, wx.ALL|wx.EXPAND, 5)
 
 		res = xrc.XmlResource("pages/"+self.data.pageModule+".xrc")
 		if res:
@@ -52,6 +61,26 @@ class Page(object):
 
 	def getTargetData(self):
 		return getTargetData(self.targetPanel)
+
+	def retryPrompt(self, msg):
+		dlg = wx.MessageDialog(self.container, msg, u'提示',
+													wx.YES_NO
+													#wx.YES_NO | wx.NO_DEFAULT | wx.CANCEL | wx.ICON_INFORMATION
+													)
+		ok = dlg.ShowModal() == wx.ID_YES
+		dlg.Destroy()
+		return ok
+
+	def beginProcess(self, log):
+		if self.processing:
+			return False
+		log['status'] = "begin"
+		return Inst.postLog(log)
+
+	def endProcess(self, log):
+		self.processing = False
+		log['status'] = "done"
+		return Inst.postLog(log)
 
 class Tool(object):
 	def __init__(self, data):
@@ -72,6 +101,10 @@ class Mgr(object):
 		tools.sort(fun)
 		self.tools = [Tool(i) for i in tools]
 
+		self.localConfig = self.loadConfig("local_config.json")
+		launcherInit(self)
+
+#------------------launcher config----------------------------
 	def platform(self):
 		return [i['name'] for i in self.config['platform']]
 
@@ -79,60 +112,51 @@ class Mgr(object):
 		return [i['name'] for i in self.config['os']]
 
 	def loadConfig(self, path):
+		if not os.path.exists(path):
+			return None
 		f=codecs.open(path, 'r', 'utf8')
 		return json.load(f, strict=False)
 
 	def dataPath(self, PL, OS):
-		root = self.config['data_root']
-		return "%s\\%s\\%s\\debug\\launcher.json" % (root, PL, OS)
+		if not self.localConfig:
+			return None
+
+		root = self.localConfig['dataRoot']
+		return "%s/%s/%s/debug/launcher.json" % (root, PL, OS)
+
+	def dataDir(self, PL, OS):
+		if not self.localConfig:
+			return None
+
+		root = self.localConfig['dataRoot']
+		return "%s/%s/%s/debug" % (root, PL, OS)
 
 	def getData(self, PL, OS):
 		path = self.dataPath(PL, OS)
-		return self.loadConfig(path)
+		if not path:
+			return None
+
+		resp = requests.get(path)
+		if not resp.ok:
+			return None
+		return resp.json()
 
 	def saveData(self, PL, OS, data):
-		path = self.dataPath(PL, OS)
-		f=codecs.open(path, 'w', 'utf-8')
+		path = self.dataDir(PL, OS)
+		if not path:
+			return False
+
+		f=codecs.open("launcher.json", 'w', 'utf-8')
 		json.dump(data, f, sort_keys = True, indent = 4, ensure_ascii=False)
 		f.close()
 
-#---------------------helpers----------------------------
-class EventHandler(object):
-	def __init__(self, functor, arg):
-		self.functor = functor
-		self.arg = arg
-
-	def __call__(self, evt):
-		pl_name, os_name = getTargetData(self.arg)
-		self.functor(pl_name, os_name)
-
-def setupTargetData(panel, os_callback, pl_callback):
-	os_lb = wx.FindWindowByName("m_os_lb", panel)
-	for i, j in enumerate(Inst.os()):
-		os_lb.Append(j)
-		os_lb.SetClientData(i, j)
-	panel.Bind(wx.EVT_LISTBOX, EventHandler(os_callback, panel), os_lb)
-
-	pl_lb = wx.FindWindowByName("m_platform_lb", panel)
-	for i, j in enumerate(Inst.platform()):
-		pl_lb.Append(j)
-		pl_lb.SetClientData(i, j)
-	panel.Bind(wx.EVT_LISTBOX, EventHandler(pl_callback, panel), pl_lb)
-
-def getTargetData(panel):
-	os_lb = wx.FindWindowByName("m_os_lb", panel)
-	select = os_lb.GetSelection()
-	os_name = None
-	if select != -1:
-		os_name = os_lb.GetClientData(select)
-
-	pl_lb = wx.FindWindowByName("m_platform_lb", panel)
-	select = pl_lb.GetSelection()
-	pl_name = None
-	if select != -1:
-		pl_name = pl_lb.GetClientData(pl_lb.GetSelection())
-
-	return pl_name, os_name
+#----------------------------common--------------------------------
+	def postLog(self, data):
+		if not self.localConfig:
+			return False
+		data['type'] = "PLBOX"
+		resp = requests.post(self.localConfig['logSrv'], data="data="+json.dumps(data), headers=headers)
+		return resp.ok
 
 def init(path):
 	global Inst

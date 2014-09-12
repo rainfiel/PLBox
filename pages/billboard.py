@@ -1,4 +1,4 @@
-
+# -*- coding: utf-8 -*-
 
 import wx
 import mgr
@@ -50,7 +50,7 @@ class billboard(mgr.Page):
 		else:
 			self.data['billboard']=[{"title":title_str, "text":text_str}]
 
-		pl_name, os_name = mgr.getTargetData(self.panel)
+		pl_name, os_name = self.getTargetData()
 		mgr.Inst.saveData(pl_name, os_name, self.data)
 		self.refresh()
 
@@ -61,7 +61,7 @@ class billboard(mgr.Page):
 		else:
 			self.data.pop("billboard", None)
 
-		pl_name, os_name = mgr.getTargetData(self.panel)
+		pl_name, os_name = self.getTargetData()
 		mgr.Inst.saveData(pl_name, os_name, self.data)
 		self.refresh()
 
@@ -89,8 +89,12 @@ class billboard(mgr.Page):
 		self.data = None
 		if pl_name and os_name:
 			self.data = mgr.Inst.getData(pl_name, os_name)
-			assert(self.data)
 		else:
+			return
+
+		if not self.data:
+			if self.retryPrompt(u"加载数据出错，是否重试"):
+				self.refresh()
 			return
 
 		if btype == SHUTDOWN:
