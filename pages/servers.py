@@ -15,11 +15,10 @@ class servers(mgr.Page):
 		self.srv_lb = wx.FindWindowByName("m_server_list", panel)
 		panel.Bind(wx.EVT_LISTBOX, self.onSelectServer, self.srv_lb)
 
-		self.setServerList(("aaaa", "bbbb", "cccc"))
-
 		return root
 
 	def setServerList(self, srvs):
+		self.srv_lb.Clear()
 		for i, srv in enumerate(srvs):
 			self.srv_lb.Append(srv)
 			self.srv_lb.SetClientData(i, srv)
@@ -28,9 +27,8 @@ class servers(mgr.Page):
 		self.refresh()
 
 	def onSelectServer(self, evt):
-		self.refresh()
 		lb = evt.GetEventObject()
-		print(lb.GetClientData(lb.GetSelection()))
+		print(lb.GetSelection())
 
 	def refresh(self):
 		pl_name, os_name = self.getTargetData()
@@ -41,3 +39,11 @@ class servers(mgr.Page):
 		else:
 			return
 
+		if not self.data:
+			if self.retryPrompt(u"加载数据出错，是否重试"):
+				self.refresh()
+			return
+
+		srvs = self.data.get('urls',{}).get("SERVER_LIST")
+		names = [ u"{:>4} {:<4}".format(i[1], i[2]) for i in srvs]
+		self.setServerList(names)

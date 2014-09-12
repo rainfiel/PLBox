@@ -23,8 +23,28 @@
 								<flag>wxALL</flag>
 								<border>5</border>
 								<object class="wxListBox" name="m_server_list">
+									<font>
+										<style>normal</style>
+										<weight>normal</weight>
+										<underlined>0</underlined>
+										<face>Fixedsys</face>
+									</font>
 									<content />
 								</object>
+							</object>
+						</object>
+					</object>
+					<object class="sizeritem">
+						<option>1</option>
+						<flag>wxALL|wxEXPAND</flag>
+						<border>5</border>
+						<object class="wxBoxSizer">
+							<orient>wxVERTICAL</orient>
+							<object class="sizeritem">
+								<option>1</option>
+								<flag>wxALL|wxEXPAND</flag>
+								<border>5</border>
+								<object class="unknown" name="m_propertyGrid1" />
 							</object>
 						</object>
 					</object>

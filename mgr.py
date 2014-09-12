@@ -138,6 +138,7 @@ class Mgr(object):
 
 		resp = requests.get(path)
 		if not resp.ok:
+			print(resp.status_code)
 			return None
 		return resp.json()
 
