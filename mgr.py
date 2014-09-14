@@ -13,6 +13,7 @@ from launcher import *
 Inst = None
 LOG_URL = "https://testcmk.ejoy.com/dl/DPL/create"
 headers = {'Content-type': 'application/json; charset=utf-8', 'Accept': 'application/json'}
+SCP = "pscp -P %d -i %s launcher.json %s@%s%s"
 
 class Page(object):
 	def __init__(self):
@@ -23,6 +24,23 @@ class Page(object):
 	def onSelectTarget(self, pl_name, os_name):
 		pass
 	#--------------------------------------------
+
+	def process(self, name, functor, args):
+		ret = Inst.postToSlack(u"```准备执行操作:[%s]```"%name)
+		if not ret:
+			if self.retryPrompt(u"log服务器出错,是否重试?"):
+				self.process(name, functor, args)
+			return
+
+		ret = functor(*args)
+		if not ret:
+			ret = Inst.postToSlack(u"[%s], 失败!:fu:"%name)
+			if self.retryPrompt(u"执行操作失败,是否重试?"):
+				self.process(name, functor, args)
+			return
+		else:
+			ret = Inst.postToSlack(u"[%s], 成功!:metal:"%name)
+			self.retryPrompt(u"执行成功", wx.OK)
 
 	def create(self, data, container):
 		self.data = data
@@ -62,25 +80,14 @@ class Page(object):
 	def getTargetData(self):
 		return getTargetData(self.targetPanel)
 
-	def retryPrompt(self, msg):
+	def retryPrompt(self, msg, style=wx.YES_NO):
 		dlg = wx.MessageDialog(self.container, msg, u'提示',
-													wx.YES_NO
+													style
 													#wx.YES_NO | wx.NO_DEFAULT | wx.CANCEL | wx.ICON_INFORMATION
 													)
 		ok = dlg.ShowModal() == wx.ID_YES
 		dlg.Destroy()
 		return ok
-
-	def beginProcess(self, log):
-		if self.processing:
-			return False
-		log['status'] = "begin"
-		return Inst.postLog(log)
-
-	def endProcess(self, log):
-		self.processing = False
-		log['status'] = "done"
-		return Inst.postLog(log)
 
 class Tool(object):
 	def __init__(self, data):
@@ -143,13 +150,22 @@ class Mgr(object):
 		return resp.json()
 
 	def saveData(self, PL, OS, data):
-		path = self.dataDir(PL, OS)
-		if not path:
+		if not self.loadConfig:
+			return False
+		path = "%s/%s/debug" % (PL, OS)
+		scpCfg = self.localConfig['scp']
+		if not scpCfg:
 			return False
 
-		f=codecs.open("launcher.json", 'w', 'utf-8')
-		json.dump(data, f, sort_keys = True, indent = 4, ensure_ascii=False)
-		f.close()
+		try:
+			f=codecs.open("launcher.json", 'w', 'utf-8')
+			json.dump(data, f, sort_keys = True, indent = 4, ensure_ascii=False)
+			f.close()
+		except:
+			return False
+
+		cmd = SCP % (scpCfg['port'], scpCfg['ppk'], scpCfg['username'], scpCfg['url'], path)
+		return os.system(cmd) == 0
 
 #----------------------------common--------------------------------
 	def postLog(self, data):
@@ -157,6 +173,17 @@ class Mgr(object):
 			return False
 		data['type'] = "PLBOX"
 		resp = requests.post(self.localConfig['logSrv'], data="data="+json.dumps(data), headers=headers)
+		return resp.ok
+
+	def postToSlack(self, data):
+		if not self.localConfig or not self.localConfig['slack']:
+			return False
+		cfg = self.localConfig['slack']
+		url = "https://slack.com/api/chat.postMessage"
+		params = {'channel':cfg['channel'], 'text':'*'+data+'*', 'username':cfg['username'],\
+					'token':cfg['token'], }
+		resp = requests.post(url, data=params, verify=False)
+		print(resp)
 		return resp.ok
 
 def init(path):

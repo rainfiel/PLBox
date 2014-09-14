@@ -31,6 +31,12 @@ class billboard(mgr.Page):
 		texts = wx.FindWindowByName("m_billboard_content", self.panel)
 		return title.IsModified() or texts.IsModified()
 
+	def saveAndReload(self, name):
+		pl_name, os_name = self.getTargetData()
+		name = "%s<platform:%s, os:%s>" % (name, pl_name, os_name)
+		self.process(name, mgr.Inst.saveData, (pl_name, os_name, self.data))
+		self.refresh()
+
 	def onOkBtn(self, evt):
 		if not self.isModified():
 			return
@@ -46,24 +52,25 @@ class billboard(mgr.Page):
 
 		btype = self.getType()
 		if btype == SHUTDOWN:
+			typename=u"关服公告"
 			self.data['notice'] = {"title":title_str, "text":text_str}
 		else:
+			typename=u"普通公告"
 			self.data['billboard']=[{"title":title_str, "text":text_str}]
 
-		pl_name, os_name = self.getTargetData()
-		mgr.Inst.saveData(pl_name, os_name, self.data)
-		self.refresh()
+		self.saveAndReload(u"修改%s"%typename)
 
 	def onDelBtn(self, evt):
 		btype = self.getType()
+		typename = ""
 		if btype == SHUTDOWN:
+			typename=u"关服公告"
 			self.data.pop("notice", None)
 		else:
+			typename=u"普通公告"
 			self.data.pop("billboard", None)
 
-		pl_name, os_name = self.getTargetData()
-		mgr.Inst.saveData(pl_name, os_name, self.data)
-		self.refresh()
+		self.saveAndReload(u"删除%s"%typename)
 
 	def onSelectType(self, evt):
 		self.refresh()
