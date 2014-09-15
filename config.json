@@ -39,5 +39,6 @@
 		{
 			"name": "ANDROID"
 		}
-	]
+	],
+	"silent": true
 }

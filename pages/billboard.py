@@ -31,12 +31,6 @@ class billboard(mgr.Page):
 		texts = wx.FindWindowByName("m_billboard_content", self.panel)
 		return title.IsModified() or texts.IsModified()
 
-	def saveAndReload(self, name):
-		pl_name, os_name = self.getTargetData()
-		name = "%s<platform:%s, os:%s>" % (name, pl_name, os_name)
-		self.process(name, mgr.Inst.saveData, (pl_name, os_name, self.data))
-		self.refresh()
-
 	def onOkBtn(self, evt):
 		if not self.isModified():
 			return

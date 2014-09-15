@@ -23,24 +23,35 @@ class Page(object):
 	#---------interface--------------------------
 	def onSelectTarget(self, pl_name, os_name):
 		pass
+	def refresh():
+		pass
 	#--------------------------------------------
+
+	def saveAndReload(self, name):
+		pl_name, os_name = self.getTargetData()
+		name = "%s<platform:%s, os:%s>" % (name, pl_name, os_name)
+		success = self.process(name, Inst.saveData, (pl_name, os_name, self.data))
+		if success:
+			self.refresh()
+		return success
 
 	def process(self, name, functor, args):
 		ret = Inst.postToSlack(u"```准备执行操作:[%s]```"%name)
 		if not ret:
 			if self.retryPrompt(u"log服务器出错,是否重试?"):
 				self.process(name, functor, args)
-			return
+			return False
 
 		ret = functor(*args)
 		if not ret:
 			ret = Inst.postToSlack(u"[%s], 失败!:fu:"%name)
 			if self.retryPrompt(u"执行操作失败,是否重试?"):
 				self.process(name, functor, args)
-			return
+			return False
 		else:
 			ret = Inst.postToSlack(u"[%s], 成功!:metal:"%name)
 			self.retryPrompt(u"执行成功", wx.OK)
+			return True
 
 	def create(self, data, container):
 		self.data = data
@@ -64,9 +75,17 @@ class Page(object):
 			# line = wx.StaticLine( self.root, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.LI_HORIZONTAL )
 			# bSizer.Add(line, 0, wx.ALL|wx.EXPAND, 5)
 
-		res = xrc.XmlResource("pages/"+self.data.pageModule+".xrc")
-		if res:
-			self.panel = res.LoadPanel(self.root, "root")
+		xrcRes = "pages/"+self.data.pageModule+".xrc"
+		if os.path.exists(xrcRes):
+			res = xrc.XmlResource("pages/"+self.data.pageModule+".xrc")
+			if res:
+				self.panel = res.LoadPanel(self.root, "root")
+		if not self.panel:
+			pyRes = "pages/"+self.data.pageModule+"_g.py"
+			if os.path.exists(pyRes):
+				panelModuel = __import__("pages."+self.data.pageModule+"_g", fromlist=['pages'])
+				if panelModuel:
+					self.panel = panelModuel.root(self.root)
 
 		if not self.panel:
 			self.panel = wx.Panel(self.container)
@@ -176,6 +195,8 @@ class Mgr(object):
 		return resp.ok
 
 	def postToSlack(self, data):
+		if self.config.get('silent', False):
+			return True
 		if not self.localConfig or not self.localConfig['slack']:
 			return False
 		cfg = self.localConfig['slack']
