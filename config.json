@@ -1,4 +1,5 @@
 {
+	"silent": false,
 	"tools": [
 		{
 			"id": 0,
@@ -19,7 +20,15 @@
 			"pageModule": "billboard",
 			"desc":"管理服务器公告",
 			"needTarget":1
+		},
+		{
+			"id": 3,
+			"name": "制作热更新",
+			"pageModule": "hotfix",
+			"desc":"制作热更新",
+			"needTarget":1
 		}
+
 	],
 	"platform": [
 		{
@@ -40,5 +49,11 @@
 			"name": "ANDROID"
 		}
 	],
-	"silent": true
+	"patch_files": [
+		"script.script",
+		"client.protolist",
+		"proto.pb",
+		"gui.epd",
+		"gui.1.epp"
+	]
 }

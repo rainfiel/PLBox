@@ -47,10 +47,10 @@ class billboard(mgr.Page):
 		btype = self.getType()
 		if btype == SHUTDOWN:
 			typename=u"关服公告"
-			self.data['notice'] = {"title":title_str, "text":text_str}
+			self.targetdata['notice'] = {"title":title_str, "text":text_str}
 		else:
 			typename=u"普通公告"
-			self.data['billboard']=[{"title":title_str, "text":text_str}]
+			self.targetdata['billboard']=[{"title":title_str, "text":text_str}]
 
 		self.saveAndReload(u"修改%s"%typename)
 
@@ -59,10 +59,10 @@ class billboard(mgr.Page):
 		typename = ""
 		if btype == SHUTDOWN:
 			typename=u"关服公告"
-			self.data.pop("notice", None)
+			self.targetdata.pop("notice", None)
 		else:
 			typename=u"普通公告"
-			self.data.pop("billboard", None)
+			self.targetdata.pop("billboard", None)
 
 		self.saveAndReload(u"删除%s"%typename)
 
@@ -87,24 +87,24 @@ class billboard(mgr.Page):
 		title.SetValue("")
 		texts.SetValue("")
 
-		self.data = None
+		self.targetdata = None
 		if pl_name and os_name:
-			self.data = mgr.Inst.getData(pl_name, os_name)
+			self.targetdata = mgr.Inst.getData(pl_name, os_name)
 		else:
 			return
 
-		if not self.data:
+		if not self.targetdata:
 			if self.retryPrompt(u"加载数据出错，是否重试"):
 				self.refresh()
 			return
 
 		if btype == SHUTDOWN:
-			notice = self.data.get("notice", None)
+			notice = self.targetdata.get("notice", None)
 			if notice:
 				title.SetValue(notice['title'])
 				texts.SetValue(notice['text'])
 		else:
-			bb = self.data.get("billboard", None)
+			bb = self.targetdata.get("billboard", None)
 			if bb:
 				title.SetValue(bb[0]['title'])
 				texts.SetValue(bb[0]['text'])

@@ -13,7 +13,7 @@ from launcher import *
 Inst = None
 LOG_URL = "https://testcmk.ejoy.com/dl/DPL/create"
 headers = {'Content-type': 'application/json; charset=utf-8', 'Accept': 'application/json'}
-SCP = "pscp -P %d -i %s launcher.json %s@%s%s"
+SCP = "pscp -P %d -i %s %s %s@%s%s"
 
 class Page(object):
 	def __init__(self):
@@ -25,12 +25,14 @@ class Page(object):
 		pass
 	def refresh():
 		pass
+	def preCreate(self, sizer):
+		pass
 	#--------------------------------------------
 
 	def saveAndReload(self, name):
 		pl_name, os_name = self.getTargetData()
 		name = "%s<platform:%s, os:%s>" % (name, pl_name, os_name)
-		success = self.process(name, Inst.saveData, (pl_name, os_name, self.data))
+		success = self.process(name, Inst.saveData, (pl_name, os_name, self.targetdata))
 		if success:
 			self.refresh()
 		return success
@@ -43,8 +45,8 @@ class Page(object):
 			return False
 
 		ret = functor(*args)
-		if not ret:
-			ret = Inst.postToSlack(u"[%s], 失败!:fu:"%name)
+		if ret != None:
+			ret = Inst.postToSlack(u"[%s], 失败!:fu:<%s>"%(name, ret))
 			if self.retryPrompt(u"执行操作失败,是否重试?"):
 				self.process(name, functor, args)
 			return False
@@ -74,6 +76,8 @@ class Page(object):
 
 			# line = wx.StaticLine( self.root, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.LI_HORIZONTAL )
 			# bSizer.Add(line, 0, wx.ALL|wx.EXPAND, 5)
+
+		self.preCreate(bSizer)
 
 		xrcRes = "pages/"+self.data.pageModule+".xrc"
 		if os.path.exists(xrcRes):
@@ -157,6 +161,9 @@ class Mgr(object):
 		root = self.localConfig['dataRoot']
 		return "%s/%s/%s/debug" % (root, PL, OS)
 
+	def patchFiles(self):
+		return self.config['patch_files']
+
 	def getData(self, PL, OS):
 		path = self.dataPath(PL, OS)
 		if not path:
@@ -169,22 +176,40 @@ class Mgr(object):
 		return resp.json()
 
 	def saveData(self, PL, OS, data):
-		if not self.loadConfig:
-			return False
-		path = "%s/%s/debug" % (PL, OS)
+		if not self.localConfig:
+			return "no local config file"
 		scpCfg = self.localConfig['scp']
 		if not scpCfg:
-			return False
+			return "no pscp config section"
+
+		path = "%s/%s/debug" % (PL, OS)
 
 		try:
 			f=codecs.open("launcher.json", 'w', 'utf-8')
 			json.dump(data, f, sort_keys = True, indent = 4, ensure_ascii=False)
 			f.close()
 		except:
+			return "save config json file failed"
+
+		cmd = SCP % (scpCfg['port'], scpCfg['ppk'], "launcher.json", scpCfg['username'], scpCfg['url'], path)
+		if os.system(cmd) != 0:
+			return "execute cmd failed:" + cmd
+		return None
+
+	def uploadFiles(self, PL, OS, files):
+		if not self.localConfig:
+			return False
+		scpCfg = self.localConfig['scp']
+		if not scpCfg:
 			return False
 
-		cmd = SCP % (scpCfg['port'], scpCfg['ppk'], scpCfg['username'], scpCfg['url'], path)
+		path = "%s/%s/debug" % (PL, OS)
+
+		source = " ".join(files)
+		cmd = SCP % (scpCfg['port'], scpCfg['ppk'], source, scpCfg['username'], scpCfg['url'], path)
+		print(cmd)
 		return os.system(cmd) == 0
+
 
 #----------------------------common--------------------------------
 	def postLog(self, data):
@@ -204,7 +229,6 @@ class Mgr(object):
 		params = {'channel':cfg['channel'], 'text':'*'+data+'*', 'username':cfg['username'],\
 					'token':cfg['token'], }
 		resp = requests.post(url, data=params, verify=False)
-		print(resp)
 		return resp.ok
 
 def init(path):

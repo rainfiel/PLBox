@@ -37,11 +37,11 @@ class servers(mgr.Page):
 		if self.targetIndex < 0 or self.targetIndex >= len(self.srvs):
 			return
 		self.srvs.pop(self.targetIndex)
-		self.saveAndReload(u"删除服务器配置")		
+		self.saveAndReload(u"删除服务器配置")
 
 	def onAddBtn(self, evt):
 		self.refresh()
-		if not self.data:
+		if not self.targetdata:
 			return
 
 		self.panel.m_add_confirm_btn.Show()
@@ -145,17 +145,17 @@ class servers(mgr.Page):
 		self.panel.m_add_confirm_btn.Hide()
 
 		pl_name, os_name = self.getTargetData()
-		self.data = None
+		self.targetdata = None
 		if pl_name and os_name:
-			self.data = mgr.Inst.getData(pl_name, os_name)
-			assert(self.data)
+			self.targetdata = mgr.Inst.getData(pl_name, os_name)
+			assert(self.targetdata)
 		else:
 			return
 
-		if not self.data:
+		if not self.targetdata:
 			if self.retryPrompt(u"加载数据出错，是否重试"):
 				self.refresh()
 			return
 
-		self.srvs = self.data.get('urls',{}).get("SERVER_LIST")
+		self.srvs = self.targetdata.get('urls',{}).get("SERVER_LIST")
 		self.updateSrvList()

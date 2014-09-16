@@ -23,6 +23,9 @@ import wx.lib.inspection
 import wx.lib.mixins.inspection
 import sys, os
 
+sys.path.append("../")
+
+
 # stuff for debugging
 print "Python", sys.version
 print "wx.version:", wx.version()
